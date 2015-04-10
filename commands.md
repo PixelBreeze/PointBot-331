@@ -3,4 +3,4 @@
 ####Everyone
 Command | Description
 --------|------------
-`\pb help` | Sends a link to this file
+`.pb help` | Sends a link to this file
