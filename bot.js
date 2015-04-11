@@ -1,5 +1,8 @@
 var version = '0.0.2';
 //
+//Version 0.0.3
+//Added .pb stop command for managers+
+//
 //Version 0.0.2
 //Disabled the warning, its not really useful
 //Changed the \ in the command to .
@@ -17,6 +20,7 @@ function all(data) {
 	var username = data.un;
 	var userid = data.uid;
 	var messageid = data.cid;
+	var userrole = API.getUser(userid).role;
 	if (message.slice(0,3) != '.pb') {
 		return;
 	}
@@ -28,7 +32,13 @@ function all(data) {
 	switch (message) {
 		case '.pb help':
 			API.sendChat('[PB] [@' + username + '] Click here for a list of commands: https://github.com/DragonCzz/PointBot-331/blob/master/commands.md');
-		break;
+			break;
+		case '.pb stop':
+			if (userrole > 2) {
+				API.sendChat('[PB] [@' + username + '] Stopping PointBot-331!');
+				API.off(API.CHAT,all);
+			}
+			break;
 	}
 }
 
