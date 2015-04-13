@@ -1,5 +1,8 @@
 var version = '0.1.0';
 //
+//Version 0.1.1
+//Fixed saving
+//
 //Version 0.1.0
 //Added local saving & loading function
 //Added settings. Command & function to change them will come later.
@@ -101,13 +104,21 @@ function checkPoints(username) {
 }
 
 function saveStuff() {
-	localStorage.PBusers = users;
-	localStorage.PBSettings = settings;
+	localStorage.PBUsers = forinclone(users);
+	localStorage.PBSettings = forinclone(settings);
 }
 
 function loadStuff() {
 	users = localStorage.PBusers;
 	settings = localStorage.PBSettings;
+}
+
+function forinclone(arr) {
+      var a, arr_clone = new Array(arr.length);
+      for (a in arr) {
+        arr_clone[a] = arr[a];
+      }
+      return arr_clone;
 }
 
 //Let the function "all" run when there is a new message
