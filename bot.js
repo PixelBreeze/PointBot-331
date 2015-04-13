@@ -1,4 +1,8 @@
-var version = '0.0.2';
+var version = '0.1.0';
+//
+//Version 0.1.0
+//Added local saving & loading function
+//Added settings. Command & function to change them will come later.
 //
 //Version 0.0.3
 //Added .pb stop command for managers+
@@ -25,6 +29,13 @@ var users = {
 	}
 }
 
+var settings = {
+	'stopRole' : 3,
+	'giveRole' : 2,
+	'checkOtherRole' : 1,
+	'checkRole' : 0
+}
+
 //This function runs when someone says something
 function all(data) {
 	var message = data.message;
@@ -41,25 +52,27 @@ function all(data) {
 	
 	//Check what the message is, and if it's an existing PointBot command, respond
 	switch (message.split(' ')[1]) {
-		case 'help':
+		case 'commands':
 			API.sendChat('[PB] [@' + username + '] Click here for a list of commands: https://github.com/DragonCzz/PointBot-331/blob/master/commands.md');
 			break;
 		case 'stop':
-			if (userrole > 2) {
+			if (userrole >= settings.stopRole) {
 				API.sendChat('[PB] [@' + username + '] Stopping PointBot-331!');
 				API.off(API.CHAT,all);
 			}
 			break;
 		case 'points':
-			//if the command is ran by bouncer or higher and someone is @mentioned in it
-			if (userrole > 1 && message.split('@').length > 1) {
+			//if the command is ran by [set rank] or higher and someone is @mentioned in it
+			if (userrole >= settings.checkOtherRole && message.split('@').length > 1) {
 				//respond
 				var userTargetName = message.slice(message.indexOf('@') + 1,255);
 				API.sendChat('[PB] [@' + username + '] The user @' + userTargetName + ' has ' + checkPoints(userTargetName) + ' points.')
 			}
 			else {
-				//respond
-				API.sendChat('[PB] [@' + username + '] You have ' + checkPoints(username) + ' points.')	
+				if (userrole >= settings.checkRole) {
+					//respond
+					API.sendChat('[PB] [@' + username + '] You have ' + checkPoints(username) + ' points.')	
+				}
 			}
 			break;
 		case 'give':
@@ -85,6 +98,16 @@ function checkPoints(username) {
 	//get the points of the user
 	var targetUserPoints = users[userid].points;
 	return targetUserPoints;
+}
+
+function saveStuff() {
+	localStorage.PBusers = users;
+	localStorage.PBSettings = settings;
+}
+
+function loadStuff() {
+	users = localStorage.PBusers;
+	settings = localStorage.PBSettings;
 }
 
 //Let the function "all" run when there is a new message
