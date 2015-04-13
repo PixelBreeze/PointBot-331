@@ -6,7 +6,7 @@ Command | Description
 `.pb commands` | Sends a link to this file
 `.pb points` | Check own points
 
-####ResDJ +
+####ResDJ+
 Command | Description
 --------|------------
 `.pb points @user` | Check points of someone else
